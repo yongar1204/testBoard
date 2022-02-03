@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.testboard.mapper.FileMapper">
+    <insert id="save" parameterType="hashmap">
+        insert into att_files (board_idx, file_name, orig_file_name, file_path)
+        values ( #{boardIdx}, #{fileName}, #{origFileName}, #{filePath} )
+    </insert>
+    <select id="getFiles" parameterType="Long" resultType="HashMap">
+        select * from att_files f where f.board_idx = #{board_idx}
+    </select>
+</mapper>

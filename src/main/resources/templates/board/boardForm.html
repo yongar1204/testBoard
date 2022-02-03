@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/common :: head(BoardForm)">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<main>
+    <nav th:replace="fragment/common :: top-menu"></nav>
+    <div class="middle">
+        <div th:replace="fragment/common :: tbody"></div>
+        <div class="board-form">
+            <form method="post" enctype="multipart/form-data" id="boardForm">
+                <div class="container">
+                    <div class="board-content mb-3">
+                        <label for="formGroupExampleInput" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder" name="title">
+                    </div>
+                    <div class="board-content mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Content</label>
+                        <textarea type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder" rows="10" name="content"></textarea>
+                    </div>
+                    <div class="board-content file-upload">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" style="padding-left: 0">File Upload</label>
+                        <div class="col-sm-12 col-md-7" style="padding-left: 0">
+                            <input type="file" multiple="multiple" name="img" id="img">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <a type="button" class="create btn btn-primary">확인</a>
+                        <a type="button" class="btn btn-primary">취소</a>
+                        <button type="button" class="create">ggg</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $('.create').click(function (){
+        var object = {}
+        var formDataArr = $('#boardForm').serializeArray()
+        var len = formDataArr.length
+        for (i=0; i<len; i++){
+            object[formDataArr[i].name] = formDataArr[i].value;
+        }
+        var jsonData = JSON.stringify(object)
+        $.ajax({
+            url:'/api/board/create',
+            type:"POST",
+            data:jsonData,
+            contentType:"application/json;charset=UTF-8",
+            //success : function 시 success 비활성화, 작동은됨.
+            success : function(result){
+                console.log('result', result);
+                alert('등록되었습니다.');
+                window.location.href = '/';
+            }
+        });
+    })
+</script>
+<script>
+    $(document).ready(function (){
+        $.ajax({
+            url: '/api/board/category',
+            type: 'GET',
+            dataType: JSON,
+            success: function (result){
+                $.each(result, function (idx, item){
+                    $('.category-list').append("<li id="+ idx +">" +item.categoryName+ "</li>")
+                })
+            },
+            error: function () {
+                alert("Message : error")
+            }
+        })
+    })
+</script></body>
+</html>

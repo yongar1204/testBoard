@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/starter-template.css}" href="/static/css/starter-template.css">
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<main style="margin: 30px">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#" th:href="@{/}"><span class="glyphicon glyphicon-home"></span> &nbsp TEST BOARD</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <div class="account">
+                    <a class="mainloginbtn" th:href="@{/account/login}" sec:authorize="!isAuthenticated()">Login</a>
+                    <a class="createAccount" th:href="@{/account/register}" sec:authorize="!isAuthenticated()">Create</a>
+                    <form class="mainlogout" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="POST">
+                        <span class="text-white" sec:authentication="name">사용자</span>
+                        <span class="text-white mx-2" sec:authentication="principal.authorities">권한</span>
+                        <button class="mainlogoutbtn" type="submit">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <label for="recentPost" class="form-label" id="recentPost1">Recent Post</label>
+    <div class="indexBoard" id="recentPost">
+        <div class="recentBoard">
+            <label for="recentF" class="form-label">FREE BOARD</label>
+            <div class="freeBoardC5" id="recentF">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="cen" scope="col">No</th>
+                        <th class="cen" scope="col">Title</th>
+                        <th class="cen" scope="col">User</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bTbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="recentNotice">
+            <label for="recentN" class="form-label">NOTICE</label>
+            <div class="noticeC5" id="recentN">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="cen" scope="col">No</th>
+                        <th class="cen" scope="col">Title</th>
+                        <th class="cen" scope="col">CreatedAt</th>
+                    </tr>
+                    </thead>
+                    <tbody class="nTbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+    $(document).ready(function (){
+        $.ajax({
+            url: '/api/index',
+            data:{
+                catNum: 1
+            },
+            dataType:'JSON',
+            type:'GET',
+            success: function (result){
+                $.each(result, function (idx, row){
+                    $('.bTbody').append(
+                        "<tr><td>"
+                        + row.idx +
+                        "</td><td><a>"
+                        + row.title +
+                        "</a></td><td>"
+                        + row.user.userId +
+                        "</td></tr>"
+                    )
+                })
+            },
+            error: function () {
+                alert("Message : board List error")
+            }
+        })
+        $.ajax({
+            url: '/api/index',
+            data:{
+                catNum: 2
+            },
+            dataType:'JSON',
+            type:'GET',
+            success: function (result){
+                $.each(result, function (idx, row){
+                    $('.nTbody').append(
+                        "<tr><td>"
+                        + row.idx +
+                        "</td><td><a>"
+                        + row.title +
+                        "</a></td><td>"
+                        + row.createdAt +
+                        "</td></tr>"
+                    )
+                })
+            },
+            error: function () {
+                alert("Message : board List error")
+            }
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+body {
+  padding-top: 50px;
+}
+.tbody{
+  font-size: 18px;
+}
+.middle{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 70px;
+}
+.listTable{
+  width: 80%;
+}
+a:link{
+  color: black;
+  text-decoration-line: none;
+}
+.sidebar{
+  border: solid;
+  border-color: darkgrey;
+  border-radius: 10px;
+}
+nav a:link{
+  color: #9d9d9d;
+}
+nav a:hover{
+  color: whitesmoke;
+  text-decoration-line: none;
+}
+.category-title{
+  margin: 15px 10px 15px 8px;
+}
+.board-form{
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-right: 20px;
+  font-size: 18px;
+}
+.file-upload{
+  display: flex;
+  flex-direction: column;
+}
+.link-dark{
+  font-size: 13px;
+}
+.starter-template {
+  padding: 40px 15px;
+  /* text-align: center; */
+}
+th,td{
+  text-align: center;
+}
+.cen{
+  text-align: center;
+}
+.text-right{
+  margin-top: 10px;
+}
+.pageli{
+  text-align: center;
+}
+
+.btn.btn-primary.mb-3 {
+  padding: revert;
+  margin-left: 5px;
+}
+.row{
+  display: flex;
+  justify-content: flex-end;
+}
+.col-auto{
+  display: flex;
+}
+.account{
+  display: flex;
+  justify-content:flex-end;
+  align-items: center;
+  margin-top: 12px;
+}
+.text-white{
+  color: aliceblue;
+  margin-left: 3px;
+}
+.mainloginbtn{
+  margin-right: 5px;
+}
+.modal-title{
+  box-sizing: border-box;
+  width: auto;
+}
+.classify1{
+  margin-top: 20px;
+}
+.replyContainer{
+  width: auto;
+}
+#replyList{
+  display: flex;
+  justify-content: space-between;
+}
+.fileList{
+  display: flex;
+  flex-direction: column;
+}
+.decContent.fileList{
+  display: flex;
+  flex-direction: column;
+}
+.disabled{
+  pointer-events: none;
+  cursor: default;
+}
+.border-dark{
+  border: solid;
+  border-radius: 10px;
+  border-color: darkgrey;
+  padding: 10px;
+  margin: 10px;
+}
+.board-content{
+  padding-top: 15px;
+}
+.btn-cre{
+  border-style: solid;
+  border-radius: 5px;
+  border-color: #9d9d9d;
+  padding: 5px;
+}
+
+/*index page*/
+.indexBoard{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#recentPost1{
+  font-size: 30px;
+}
+.recentBoard,.recentNotice{
+  width: 40%;
+}

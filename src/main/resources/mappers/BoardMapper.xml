@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.testboard.mapper.BoardMapper">
+    <insert id="save" parameterType="hashmap" useGeneratedKeys="true" keyProperty="idx" keyColumn="board_idx">
+        insert into board (category_idx, user_idx, title, content, created_at) values (#{category} ,#{userIdx}, #{title}, #{content}, now() );
+    </insert>
+
+    <resultMap id="categoryMap" type="com.example.testboard.model.dto.CategoryDto">
+        <id property="idx" column="idx"/>
+        <result property="categoryName" column="category"/>
+    </resultMap>
+    <select id="getCategory" resultMap="categoryMap">
+        select * from board_category;
+    </select>
+
+    <resultMap id="userMap" type="com.example.testboard.model.dto.UserDto">
+        <id column="user_idx" property="idx"/>
+        <result property="userId" column="user_id"/>
+        <result property="password" column="password"/>
+        <collection property="userRoles" column="id" ofType="com.example.testboard.model.dto.UserRoleDto">
+            <result property="idx" column="idx"/>
+            <result property="userId" column="user_idx"/>
+            <result property="roleId" column="role_idx"/>
+            <association property="role" column="role_idx" javaType="com.example.testboard.model.dto.RoleDto" resultMap="roleMap">
+            </association>
+        </collection>
+    </resultMap>
+
+    <resultMap id="roleMap" type="com.example.testboard.model.dto.RoleDto">
+        <id property="idx" column="idx"/>
+        <result property="roleName" column="role_name"/>
+    </resultMap>
+
+    <resultMap id="boardMap" type="com.example.testboard.model.dto.BoardDto">
+        <id property="idx" column="board_idx"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <association property="user" column="user_idx" javaType="com.example.testboard.model.dto.UserDto" resultMap="userMap"/>
+        <association property="category" column="category_idx" javaType="com.example.testboard.model.dto.CategoryDto" resultMap="categoryMap"/>
+    </resultMap>
+
+    <select id="getList" parameterType="String" resultMap="boardMap">
+        select *
+        from board b, board_category c, user u, user_role ur, role r
+        where c.category = #{ctg} and c.idx = b.category_idx and u.user_idx = b.user_idx
+          and ur.user_idx = u.user_idx and r.idx = ur.role_idx
+        order by b.board_idx asc;
+    </select>
+
+    <select id="fiveRow" parameterType="int" resultMap="boardMap">
+        select *
+        from board b, user u
+        where category_idx = #{catNum} and b.user_idx = u.user_idx
+        order by b.board_idx desc
+        limit 5;
+    </select>
+
+<!--    boardDetail-->
+    <resultMap id="detailMap" type="HashMap">
+        <result column="board_idx" property="bIdx"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+    <select id="getDetail" parameterType="Long" resultMap="detailMap">
+        select *
+        from board b, user u
+        where b.board_idx = #{idx} and u.user_idx = b.user_idx;
+    </select>
+</mapper>
