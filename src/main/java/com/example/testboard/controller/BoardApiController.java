@@ -57,9 +57,26 @@ public class BoardApiController {
         Map<String, Object> listMap = new HashMap<>();
         List<BoardDto> pagingList = boardService.getPagingList(ctg, criteria);
         listMap.put("paging",criteria);
-        listMap.put("pagingList", listMap);
+        listMap.put("pagingList", pagingList);
+        System.out.println(listMap.get("paging"));
+        System.out.println(listMap.get("pagingList"));
 //        map boardDto와 paging 함께 담기
         return findAll;
-    }
 
+    }
+    @GetMapping("/test")
+    public Map<String, Object> getLists(@RequestParam String ctg,
+                                  @RequestParam(required = false, defaultValue = "1") int pn) {
+        List<BoardDto> findAll = boardService.getList(ctg);
+        Criteria criteria = new Criteria(pn);
+        criteria.setTotalElements(findAll.size());
+        criteria.setTotalPages((int) Math.ceil(criteria.getTotalElements() / (double) criteria.getRecords()));
+        criteria.setLastPage(Math.min(criteria.getTotalPages(), (criteria.getStartPage() + criteria.getDisplayPageNum() - 1)));
+        Map<String, Object> listMap = new HashMap<>();
+        List<BoardDto> pagingList = boardService.getPagingList(ctg, criteria);
+        listMap.put("paging", criteria);
+        listMap.put("pagingList", pagingList);
+//        map boardDto와 paging 함께 담기
+        return listMap;
+    }
 }

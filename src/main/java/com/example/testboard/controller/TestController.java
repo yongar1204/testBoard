@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TestController {
     @GetMapping("/1")
     public String t1(){
-        return "/board/boardList";
+        return "/test";
     }
 
     @GetMapping("/index")
