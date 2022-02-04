@@ -20,7 +20,7 @@ public class Criteria {
     public Criteria(int pn){
         this.pageNum = pn;
         this.records = 5;
-        this.displayPageNum = 5;
+        this.displayPageNum = 3;
         this.endPage = (int) Math.ceil(pageNum / (double)getDisplayPageNum()) * getDisplayPageNum();
         this.startPage = (endPage - getDisplayPageNum()) + 1;
     }

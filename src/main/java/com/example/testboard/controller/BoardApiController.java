@@ -46,8 +46,8 @@ public class BoardApiController {
         return boardService.getCategory();
     }
 
-    @GetMapping("/list")
-    public List<BoardDto> getList(@RequestParam String ctg,
+    @GetMapping("/test")
+    public List<BoardDto> getList(@RequestParam(defaultValue = "FREE_BOARD") String ctg,
                                   @RequestParam(required = false, defaultValue = "1") int pn){
         List<BoardDto> findAll = boardService.getList(ctg);
         Criteria criteria = new Criteria(pn);
@@ -58,14 +58,11 @@ public class BoardApiController {
         List<BoardDto> pagingList = boardService.getPagingList(ctg, criteria);
         listMap.put("paging",criteria);
         listMap.put("pagingList", pagingList);
-        System.out.println(listMap.get("paging"));
-        System.out.println(listMap.get("pagingList"));
-//        map boardDto와 paging 함께 담기
         return findAll;
 
     }
-    @GetMapping("/test")
-    public Map<String, Object> getLists(@RequestParam String ctg,
+    @GetMapping("/list")
+    public Map<String, Object> getLists(@RequestParam(defaultValue = "FREE_BOARD", required = false) String ctg,
                                   @RequestParam(required = false, defaultValue = "1") int pn) {
         List<BoardDto> findAll = boardService.getList(ctg);
         Criteria criteria = new Criteria(pn);
@@ -76,7 +73,6 @@ public class BoardApiController {
         List<BoardDto> pagingList = boardService.getPagingList(ctg, criteria);
         listMap.put("paging", criteria);
         listMap.put("pagingList", pagingList);
-//        map boardDto와 paging 함께 담기
         return listMap;
     }
 }

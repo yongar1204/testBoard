@@ -21,7 +21,22 @@
 </head>
 <body>
 <main>
-    <div>test</div>
+    <div>test </div>
+    <table>
+        <thead>
+        <tr>
+            <th class="cen" scope="col">No</th>
+            <th class="cen" scope="col">Title</th>
+            <th class="cen" scope="col">User</th>
+            <th class="cen" scope="col">Created Time</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <ul class="pagination">
+    </ul>
 </main>
 <script>
     $(document).ready(function (){
@@ -29,21 +44,71 @@
             url: '/api/board/test',
             type: 'GET',
             dataType: 'JSON',
-            data:{
-                ctg:"FREE_BOARD",
-                pn:"2"
-            },
+            // data:{
+            //     ctg:"FREE_BOARD"
+            // },
             async: false,
             success: function (result){
-                console.log(result.pagingList[1].title);
-                // $.each(result, function (idx, item){
-                // })
+                console.log(result.pagingList[1]);
+                func(result)
+                $(document).on('click', '.pn' , function (){
+                    var pn = this.id
+                    console.log(pn)
+                    $.ajax({
+                        url: '/api/board/test',
+                        type: 'GET',
+                        dataType: 'JSON',
+                        data:{
+                            ctg: "FREE_BOARD",
+                            pn: pn
+                        },
+                        success: function (data){
+                            console.log(data)
+                            func(data)
+                        },
+                        error:function (){
+                            alert("Message : error")
+                        },
+                        async: false,
+                    })
+                })
+
             },
             error: function () {
                 alert("Message : error")
             }
         })
     })
+    function func(result){
+        var preId = result.paging.pageNum -1
+        var nextId = result.paging.pageNum +1
+        console.log(preId);
+        $('tbody').empty();
+        $('.pagination').empty();
+        $('.pagination').append("<li id="+preId+" class='pn'><a th:href='#'>P</a></li>")
+        for (i=result.paging.startPage; i<=result.paging.lastPage; i++){
+            $('.pagination').append("<li id='"+i+
+                                    "' class='pn'" +i+
+                                    "><a th:href='/api/board/test?pn=" +i+
+                                    "'>" + i +"</a></li>")
+
+        }
+        $('.pagination').append("<li id="+nextId+" class='pn'><a th:href='#'>N</a></li>")
+        $.each(result.pagingList, function (idx, cont){
+            console.log(cont.title)
+            $('tbody').append(
+                "<tr><td>"
+                + cont.idx +
+                "</td><td><a>"
+                + cont.title +
+                "</a></td><td>"
+                + cont.user.userId +
+                "</td><td>"
+                + cont.createdAt +
+                "</td></tr>"
+            )
+        })
+    }
 </script>
 </body>
 </html>

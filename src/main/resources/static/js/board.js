@@ -1,5 +1,5 @@
 'use strict'
-//side bar menu
+//side bar menu and list
 $(document).ready(function (){
     $.ajax({
         url: '/api/board/category',
@@ -28,20 +28,27 @@ $(document).ready(function (){
                         ctg: ctgId
                     },
                     success: function (result){
-                        // fn(result);
-                        $('tbody').empty();
-                        $.each(result, function (idx, cont){
-                            $('tbody').append(
-                                "<tr><td>"
-                                + cont.idx +
-                                "</td><td><a>"
-                                + cont.title +
-                                "</a></td><td>"
-                                + cont.user.userId +
-                                "</td><td>"
-                                + cont.createdAt +
-                                "</td></tr>"
-                            )
+                        func(result);
+                        $(document).on('click', '.pn' , function (){
+                            var pn = this.id
+                            console.log(pn)
+                            $.ajax({
+                                url: '/api/board/list',
+                                type: 'GET',
+                                dataType: 'JSON',
+                                data:{
+                                    ctg: ctgId,
+                                    pn: pn
+                                },
+                                success: function (data){
+                                    console.log(data)
+                                    func(data)
+                                },
+                                error:function (){
+                                    alert("Message : error")
+                                },
+                                async: false,
+                            })
                         })
                     },
                     error: function () {
@@ -53,13 +60,29 @@ $(document).ready(function (){
                 url: '/api/board/list',
                 type: 'GET',
                 dataType: 'JSON',
-                data:{
-                    ctg:"FREE_BOARD"
-                },
                 success: function (result){
                     console.log(result);
-                    fn(result);
-
+                    func(result);
+                    $(document).on('click', '.pn' , function (){
+                        var pn = this.id
+                        console.log(pn)
+                        $.ajax({
+                            url: '/api/board/list',
+                            type: 'GET',
+                            dataType: 'JSON',
+                            data:{
+                                pn: pn
+                            },
+                            success: function (data){
+                                console.log(data)
+                                func(data)
+                            },
+                            error:function (){
+                                alert("Message : error")
+                            },
+                            async: false,
+                        })
+                    })
                 },
                 error: function () {
                     alert("Message : list error")
@@ -70,20 +93,34 @@ $(document).ready(function (){
             alert("Message : error")
         }
     })
-    function fn(b){
-        $('tbody').empty();
-        $.each(b, function (idx, cont){
-            $('tbody').append(
-                "<tr><td>"
-                + cont.idx +
-                "</td><td><a>"
-                + cont.title +
-                "</a></td><td>"
-                + cont.user.userId +
-                "</td><td>"
-                + cont.createdAt +
-                "</td></tr>"
-            )
-        })
-    }
 })
+function func(result){
+    var preId = result.paging.pageNum -1
+    var nextId = result.paging.pageNum +1
+    console.log(preId);
+    $('tbody').empty();
+    $('.pagination').empty();
+    $('.pagination').append("<li id="+preId+" class='pn'><a th:href='#'>Previous</a></li>")
+    for (var i=result.paging.startPage; i<=result.paging.lastPage; i++){
+        $('.pagination').append("<li id='"+i+
+            "' class='pn'" +i+
+            "><a th:href='/api/board/test?pn=" +i+
+            "'>" + i +"</a></li>")
+
+    }
+    $('.pagination').append("<li id="+nextId+" class='pn'><a th:href='#'>Next</a></li>")
+    $.each(result.pagingList, function (idx, cont){
+        console.log(cont.title)
+        $('tbody').append(
+            "<tr><td>"
+            + cont.idx +
+            "</td><td><a>"
+            + cont.title +
+            "</a></td><td>"
+            + cont.user.userId +
+            "</td><td>"
+            + cont.createdAt +
+            "</td></tr>"
+        )
+    })
+}
