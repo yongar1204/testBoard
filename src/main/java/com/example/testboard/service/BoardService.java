@@ -1,6 +1,7 @@
 package com.example.testboard.service;
 
 import com.example.testboard.mapper.BoardMapper;
+import com.example.testboard.model.Criteria;
 import com.example.testboard.model.dto.BoardDto;
 import com.example.testboard.model.dto.CategoryDto;
 import com.example.testboard.model.dto.UserDto;
@@ -48,5 +49,13 @@ public class BoardService {
 
     public Map<String, Object> getDetail(Long idx) {
         return boardMapper.getDetail(idx);
+    }
+
+    public List<BoardDto> getPagingList(String ctg, Criteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("ctg", ctg);
+        map.put("records", criteria.getRecords());
+        map.put("startPageNum", (criteria.getPageNum()-1)*criteria.getRecords());
+        return boardMapper.getPagingList(map);
     }
 }

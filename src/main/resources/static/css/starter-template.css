@@ -77,7 +77,7 @@ th,td{
   display: flex;
   justify-content:flex-end;
   align-items: center;
-  margin-top: 12px;
+  flex-wrap: nowrap;
 }
 .text-white{
   color: aliceblue;
@@ -140,4 +140,11 @@ th,td{
 }
 .recentBoard,.recentNotice{
   width: 40%;
+}
+
+/*fragment*/
+.container{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }

@@ -1,6 +1,7 @@
 package com.example.testboard.controller;
 
 import com.example.testboard.mapper.AccountMapper;
+import com.example.testboard.model.Criteria;
 import com.example.testboard.model.dto.BoardDto;
 import com.example.testboard.model.dto.CategoryDto;
 import com.example.testboard.service.BoardService;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.script.ScriptEngine;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +47,19 @@ public class BoardApiController {
     }
 
     @GetMapping("/list")
-    public List<BoardDto> getList(@RequestParam String ctg){
-        return boardService.getList(ctg);
+    public List<BoardDto> getList(@RequestParam String ctg,
+                                  @RequestParam(required = false, defaultValue = "1") int pn){
+        List<BoardDto> findAll = boardService.getList(ctg);
+        Criteria criteria = new Criteria(pn);
+        criteria.setTotalElements(findAll.size());
+        criteria.setTotalPages((int) Math.ceil(criteria.getTotalElements()/(double)criteria.getRecords()));
+        criteria.setLastPage(Math.min(criteria.getTotalPages(), (criteria.getStartPage()+criteria.getDisplayPageNum()-1)));
+        Map<String, Object> listMap = new HashMap<>();
+        List<BoardDto> pagingList = boardService.getPagingList(ctg, criteria);
+        listMap.put("paging",criteria);
+        listMap.put("pagingList", listMap);
+//        map boardDto와 paging 함께 담기
+        return findAll;
     }
 
 }

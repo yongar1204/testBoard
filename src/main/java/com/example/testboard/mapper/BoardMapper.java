@@ -20,4 +20,5 @@ public interface BoardMapper {
 
     Map<String, Object> getDetail(Long idx);
 
+    List<BoardDto> getPagingList(Map<String, Object> map);
 }

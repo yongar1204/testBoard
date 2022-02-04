@@ -48,6 +48,14 @@
         order by b.board_idx asc;
     </select>
 
+    <select id="getPagingList" parameterType="hashmap" resultMap="boardMap">
+        select *
+        from board b, board_category c, user u, user_role ur, role r
+        where c.category = #{ctg} and c.idx = b.category_idx and u.user_idx = b.user_idx
+          and ur.user_idx = u.user_idx and r.idx = ur.role_idx
+        order by b.board_idx asc limit #{startPageNum}, #{records};
+    </select>
+
     <select id="fiveRow" parameterType="int" resultMap="boardMap">
         select *
         from board b, user u
