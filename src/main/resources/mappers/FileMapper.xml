@@ -8,4 +8,7 @@
     <select id="getFiles" parameterType="Long" resultType="HashMap">
         select * from att_files f where f.board_idx = #{board_idx}
     </select>
+    <select id="getFile" parameterType="Long" resultType="HashMap">
+        select * from att_files where idx = #{idx}
+    </select>
 </mapper>

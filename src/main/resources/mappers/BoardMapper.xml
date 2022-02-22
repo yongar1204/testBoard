@@ -5,6 +5,16 @@
         insert into board (category_idx, user_idx, title, content, created_at) values (#{category} ,#{userIdx}, #{title}, #{content}, now() );
     </insert>
 
+    <update id="updateBoard" parameterType="hashmap">
+        update board
+        set title=#{title}, content=#{content}
+        where board_idx = #{idx}
+    </update>
+
+    <update id="hitUp" parameterType="Long">
+        update board set hit = hit+1 where board_idx = #{boardIdx}
+    </update>
+
     <resultMap id="categoryMap" type="com.example.testboard.model.dto.CategoryDto">
         <id property="idx" column="idx"/>
         <result property="categoryName" column="category"/>
@@ -12,6 +22,14 @@
     <select id="getCategory" resultMap="categoryMap">
         select * from board_category;
     </select>
+
+    <select id="getCategoryName" resultType="String">
+        select category from board_category;
+    </select>
+
+    <insert id="addCat" parameterType="String">
+        insert into board_category (category) values (#{catName})
+    </insert>
 
     <resultMap id="userMap" type="com.example.testboard.model.dto.UserDto">
         <id column="user_idx" property="idx"/>
@@ -36,6 +54,7 @@
         <result property="title" column="title"/>
         <result property="content" column="content"/>
         <result property="createdAt" column="created_at"/>
+        <result property="hit" column="hit"/>
         <association property="user" column="user_idx" javaType="com.example.testboard.model.dto.UserDto" resultMap="userMap"/>
         <association property="category" column="category_idx" javaType="com.example.testboard.model.dto.CategoryDto" resultMap="categoryMap"/>
     </resultMap>
@@ -53,7 +72,7 @@
         from board b, board_category c, user u, user_role ur, role r
         where c.category = #{ctg} and c.idx = b.category_idx and u.user_idx = b.user_idx
           and ur.user_idx = u.user_idx and r.idx = ur.role_idx
-        order by b.board_idx asc limit #{startPageNum}, #{records};
+        order by b.board_idx desc limit #{startPageNum}, #{records};
     </select>
 
     <select id="fiveRow" parameterType="int" resultMap="boardMap">
@@ -71,10 +90,32 @@
         <result column="content" property="content"/>
         <result column="created_at" property="createdAt"/>
         <result column="user_id" property="userId"/>
+        <result column="category_idx" property="category"/>
     </resultMap>
     <select id="getDetail" parameterType="Long" resultMap="detailMap">
         select *
         from board b, user u
         where b.board_idx = #{idx} and u.user_idx = b.user_idx;
     </select>
+
+    <delete id="delete" parameterType="Long">
+        delete from board where board_idx = #{idx};
+    </delete>
+    
+<!-- find category  -->
+    <select id="getCategoryList" resultType="hashmap">
+        select bc.idx, bc.category, cr.role_idx
+        from board_category bc, role r, category_role cr
+        where bc.idx = cr.category_idx and r.idx = cr.role_idx
+    </select>
+
+    <select id="getBoardCategory" parameterType="Long" resultType="hashmap">
+        select bc.idx, bc.category
+        from board b, board_category bc
+        where b.board_idx = #{bIdx} and b.category_idx = bc.idx
+    </select>
+
+    <delete id="deleteCategory" parameterType="String">
+        delete from board_category where category = #{catName}
+    </delete>
 </mapper>

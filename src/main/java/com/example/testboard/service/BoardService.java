@@ -30,6 +30,16 @@ public class BoardService {
         }
     }
 
+    public void updateBoard(HashMap<String, Object> m3, MultipartFile[] files) throws IOException {
+        boardMapper.updateBoard(m3);
+        Long boardIdx = (Long) m3.get("idx");
+        if (files != null){
+            for (MultipartFile f : files) {
+                fileService.attFileSave(f, boardIdx);
+            }
+        }
+    }
+
     public List<CategoryDto> getCategory(){
         return boardMapper.getCategory();
     }
@@ -57,5 +67,34 @@ public class BoardService {
         map.put("records", criteria.getRecords());
         map.put("startPageNum", (criteria.getPageNum()-1)*criteria.getRecords());
         return boardMapper.getPagingList(map);
+    }
+
+    public void hitUp(Long boardIdx){
+        boardMapper.hitUp(boardIdx);
+    }
+
+    public Map<String, Object> getBoardCategory(Long bIdx) {
+        return boardMapper.getBoardCategory(bIdx);
+    }
+
+//    adminPage
+    public List<String> getCategoryName() {
+        return boardMapper.getCategoryName();
+    }
+
+    public void addCategory(String catName) {
+        boardMapper.addCat(catName);
+    }
+
+    public void deleteBoard(Long idx) {
+        boardMapper.delete(idx);
+    }
+
+    public List<Map<String, Object>> getCategoryList() {
+        return boardMapper.getCategoryList();
+    }
+
+    public void deleteCategory(String catName) {
+        boardMapper.deleteCategory(catName);
     }
 }

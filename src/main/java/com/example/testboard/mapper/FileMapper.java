@@ -10,4 +10,6 @@ public interface FileMapper {
     void save(Map<String, Object> map);
 
     List<Map<String, Object>> getFiles(Long board_idx);
+
+    Map<String, Object> getFile(Long idx);
 }

@@ -37,4 +37,9 @@ public class FileService {
     public List<Map<String, Object>> getDetail(Long board_idx) {
         return fileMapper.getFiles(board_idx);
     }
+
+    public Map<String, Object> getFile(Long idx) {
+        return fileMapper.getFile(idx);
+    }
+
 }

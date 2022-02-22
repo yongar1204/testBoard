@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/starter-template.css}" href="/static/css/starter-template.css">
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!--    <script src="js/bootstrap.min.js"></script>-->
+    <script th:src="@{/js/admin.js}"></script>
+    <title>ADMIN</title>
+</head>
+<body>
+<main>
+    <nav class="navbar navbar-inverse navbar-fixed-top" th:replace="fragment/common :: menu"></nav>
+    <div class="adminTitle">ADMIN PAGE</div>
+    <div id="adminPage" class="adminP">
+        <div class="col-sm-3 col-md-2 sidebar" id="adminSidebar">
+            <ul class="adminSide">
+                <li class="active"><a href="#" class="menuManage">Menu Manage<span class="sr-only">(current)</span></a></li>
+                <li><a class="userManage" href="#">User Manage</a></li>
+            </ul>
+        </div>
+        <div id="managePart" class="adminMain">
+            <form id="categoryAddForm">
+                <div class="admin-content mb-3">
+                    <label for="categoryInput" class="form-label">Category</label>
+                    <input type="text" class="form-control" id="categoryInput" name="category">
+                    <button class="categoryAdd" id="categoryAddBtn">ADD</button>
+                </div>
+                <div class="isCategory">
+                    <ul class="isCategoryList">
+
+                    </ul>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" id="categoryDelete">삭제</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

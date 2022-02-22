@@ -5,6 +5,7 @@ import com.example.testboard.model.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,5 +16,13 @@ public class AccountService {
         accountMapper.insertUser(map);
         Long userId = Long.parseLong(String.valueOf(map.get("idx")));
         accountMapper.userRoleSave(userId);
+    }
+
+    public List<UserDto> allUser() {
+        return accountMapper.selectAll();
+    }
+
+    public Long getUserIdx(String userId){
+        return accountMapper.findIdxByUserId(userId);
     }
 }

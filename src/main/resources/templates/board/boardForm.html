@@ -51,6 +51,7 @@
             object[formDataArr[i].name] = formDataArr[i].value;
         }
         var jsonData = JSON.stringify(object)
+        console.log(jsonData)
         $.ajax({
             url:'/api/board/create',
             type:"POST",

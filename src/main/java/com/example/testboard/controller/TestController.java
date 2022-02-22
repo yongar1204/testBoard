@@ -11,9 +11,16 @@ public class TestController {
     public String t1(){
         return "/test";
     }
-
+    @GetMapping("/2")
+    public String adminT(){
+        return "/admin";
+    }
     @GetMapping("/index")
     public String t2(){
         return "/index";
+    }
+    @GetMapping("/sc")
+    public String sc(){
+        return "/schedules/scheduleForm";
     }
 }

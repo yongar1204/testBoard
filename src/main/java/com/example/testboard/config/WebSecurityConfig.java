@@ -20,12 +20,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/board/admin").hasRole("ADMIN")
                 .antMatchers("/account/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/account/login").permitAll()
-                .defaultSuccessUrl("/board/list",true)
+                .defaultSuccessUrl("/",true)
                 .usernameParameter("user_id")
 //                    .failureUrl("/account/login")
                 .and()
@@ -34,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web){
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-        web.ignoring().antMatchers("/css/**");
+        web.ignoring().antMatchers("/css/**", "/js/**");
     }
 
     @Bean

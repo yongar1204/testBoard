@@ -21,4 +21,20 @@ public interface BoardMapper {
     Map<String, Object> getDetail(Long idx);
 
     List<BoardDto> getPagingList(Map<String, Object> map);
+
+    List<String> getCategoryName();
+
+    void addCat(String catName);
+
+    void delete(Long idx);
+
+    List<Map<String, Object>> getCategoryList();
+
+    void updateBoard(HashMap<String, Object> m3);
+
+    void hitUp(Long boardIdx);
+
+    Map<String, Object> getBoardCategory(Long bIdx);
+
+    void deleteCategory(String catName);
 }

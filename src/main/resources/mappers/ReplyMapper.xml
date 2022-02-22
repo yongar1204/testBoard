@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.testboard.mapper.ReplyMapper">
+    <resultMap id="replyMap" type="HashMap">
+        <result column="idx" property="idx"/>
+        <result column="user_idx" property="userIdx"/>
+        <result column="board_idx" property="boardIdx"/>
+        <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+    <select id="findReply" parameterType="Long" resultMap="replyMap">
+        select idx, r.user_idx, content, user_id, board_idx
+        from reply r, user u
+        where r.board_idx = #{bIdx} and r.user_idx = u.user_idx order by idx asc;
+    </select>
+    <insert id="insertReply" parameterType="hashmap">
+        insert into reply (content, user_idx, board_idx) values ( #{reply}, #{uIdx}, #{bIdx} )
+    </insert>
+
+    <delete id="deleteReply" parameterType="Long">
+        delete from reply where idx = #{idx}
+    </delete>
+</mapper>

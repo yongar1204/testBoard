@@ -18,4 +18,5 @@ public class BoardDto {
     private UserDto user;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
+    private int hit;
 }

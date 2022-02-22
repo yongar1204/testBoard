@@ -12,77 +12,43 @@
     <!-- 부가적인 테마 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="js/bootstrap.min.js"></script>
     <script th:src="@{/js/board.js}"></script>
     <title>Title</title>
 </head>
 <body>
 <main>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#" th:href="@{/}"><span class="glyphicon glyphicon-home"></span> &nbsp TEST BOARD</a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <div class="account">
-                    <a class="mainloginbtn" th:href="@{/account/login}" sec:authorize="!isAuthenticated()">Login</a>
-                    <a class="createAccount" th:href="@{/account/register}" sec:authorize="!isAuthenticated()">Create</a>
-                    <form class="mainlogout" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="POST">
-                        <span class="text-white" sec:authentication="name">사용자</span>
-                        <span class="text-white mx-2" sec:authentication="principal.authorities">권한</span>
-                        <button class="mainlogoutbtn" type="submit">Logout</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <div class="middle">
-        <div class="tbody">
-            <aside class="sidebar">
-                <div>
-                    <ul class="list-unstyled ps-0">
-                        <li class="category-title">
-                            <a href="#">
-                                ● HOME
-                            </a>
-                        </li>
-                        <li class="category-title">
-                            <div>
-                                ● BOARD
-                            </div>
-                            <div>
-                                <ul class="categoryList">
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="category-title">
-                            <a href="#">
-                                ● NOTE
-                            </a>
-                        </li>
-                        <li class="border-top my-3"></li>
-                    </ul>
-                </div>
-            </aside>
-        </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top" th:replace="fragment/common :: menu"></nav>
+    <div class="formMiddle">
         <div class="board-form">
             <form method="post" enctype="multipart/form-data" id="boardForm">
-                <div class="container">
+                <div class="formcontainer">
                     <div class="skill">
                         <label for="formGroupExampleInput2" class="form-label">Category</label>
                         <select class="form-select" aria-label="Default select example" name="category">
-                            <option value="1">FREE BOARD</option>
-                            <option value="2" sec:authorize="hasRole('ROLE_ADMIN')">NOTICE</option>
+<!--                            <option sec:authorize="hasRole('ROLE_ADMIN')"-->
+<!--                                    th:each="categoryName : ${catName}"-->
+<!--                                    th:value="${categoryName.getIdx()}"-->
+<!--                                    th:text="${categoryName.getCategoryName()}"-->
+<!--                                    th:if="${categoryName.getIdx() == 2}"></option>-->
+<!--                            <option th:each="categoryName : ${catName}"-->
+<!--                                    th:value="${categoryName.getIdx()}"-->
+<!--                                    th:text="${categoryName.getCategoryName()}"-->
+<!--                                    th:if="${categoryName.getIdx() != 2}"></option>-->
+                            <option sec:authorize="hasRole('NORMAL_USER')"
+                                    th:each="categoryName : ${catName}"
+                                    th:if="${categoryName.get('role_idx') == 1}"
+                                    th:value="${categoryName.get('idx')}"
+                                    th:text="${categoryName.get('category')}"></option>
+
+                            <option sec:authorize="hasRole('ADMIN')"
+                                    th:each="categoryName : ${catName}"
+                                    th:if="${categoryName.get('role_idx') == 2}"
+                                    th:value="${categoryName.get('idx')}"
+                                    th:text="${categoryName.get('category')}"></option>
                         </select>
                     </div>
                     <div class="board-content mb-3">

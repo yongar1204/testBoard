@@ -128,6 +128,10 @@ th,td{
   border-color: #9d9d9d;
   padding: 5px;
 }
+.disabled{
+  pointer-events: none;
+  cursor: default;
+}
 
 /*index page*/
 .indexBoard{
@@ -138,15 +142,34 @@ th,td{
 #recentPost1{
   font-size: 30px;
 }
+#schedule{
+  font-size: 30px;
+}
 .recentBoard,.recentNotice{
   width: 40%;
 }
-
+.todayScheduleListBox{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.todayScheduleBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  border: solid darkgrey;
+  border-radius: 5px;
+  margin: 5px;
+}
 /*fragment*/
 .container{
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
+}
+.navbar-nav{
+  display: flex;
 }
 
 /*list*/
@@ -154,4 +177,115 @@ th,td{
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+/*form*/
+.formcontainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.formMiddle{
+  display: flex;
+  margin: 70px;
+  justify-content: space-between;
+}
+.board-form{
+  width: 100%;
+}
+
+
+/*admin Page*/
+#adminPage{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 40px 20px 20px;
+}
+.adminTitle{
+  margin: 22px;
+  font-size: 25px;
+}
+.adminSide{
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+.sidebar{
+  margin: 10px;
+}
+.adminMain{
+  width: 80%;
+}
+.admin-content{
+  display: flex;
+}
+#categoryInput{
+  margin: 0px 5px 0px 5px;
+}
+/*reply*/
+.line {
+  border-bottom: black;
+}
+#replyList{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+.replybox{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: solid darkgrey;
+  border-radius: 5px;
+  margin: 5px;
+}
+.inputBox{
+  padding: 10px;
+}
+#replySummit{
+  margin: 0 10px 10px 0;
+}
+
+/*schedules*/
+#sBody{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#scheduleArea{
+  margin: 20px;
+}
+#scheduleForm{
+  width: 45%;
+}
+.schedule-content{
+  display: flex;
+  flex-direction: column;
+}
+#scheduleDate{
+  display: flex;
+  flex-direction: row;
+}
+#date{
+  display: flex;
+  flex-direction: row;
+}
+.time{
+  margin: 5px;
+}
+.lookup{
+  height: 30px;
+  margin: 8px
+}
+#schedulePart{
+  border-style: solid;
+  border-radius: 5px;
+  width: 45%;
+}
+.scheduleBox{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: solid darkgrey;
+  border-radius: 5px;
+  margin: 5px;
 }

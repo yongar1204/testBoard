@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
-<head th:fragment="head(title)">
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,13 +13,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script th:src="@{/js/board.js}"></script>
-    <title th:text="${title}">Title</title>
+    <title>Title</title>
 </head>
 <body>
-<main>
-    <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="top-menu">
-        <div class="container">
+    <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="menu">
+        <div class="container" id="navContainer">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
@@ -30,72 +32,32 @@
                 <a class="navbar-brand" href="#" th:href="@{/}"><span class="glyphicon glyphicon-home"></span> &nbsp TEST BOARD</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
-                <div class="account">
-                    <a class="mainloginbtn" th:href="@{/account/login}" sec:authorize="!isAuthenticated()">Login</a>
-                    <a class="createAccount" th:href="@{/account/register}" sec:authorize="!isAuthenticated()">Create</a>
-                    <form class="mainlogout" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="POST">
-                        <span class="text-white" sec:authentication="name">사용자</span>
-                        <span class="text-white mx-2" sec:authentication="principal.authorities">권한</span>
-                        <button class="mainlogoutbtn" type="submit">Logout</button>
-                    </form>
-                </div>
+                <ul class="nav navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/board/list}">Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/schedule/form}">Schedule</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/board/admin}" sec:authorize="hasRole('ROLE_ADMIN')">Admin Page</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="account">
+                <a class="mainloginbtn" th:href="@{/account/login}" sec:authorize="!isAuthenticated()">Login</a>
+                <a class="createAccount" th:href="@{/account/register}" sec:authorize="!isAuthenticated()">Create</a>
+                <form class="mainlogout" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="POST">
+                    <span class="text-white" sec:authentication="name">사용자</span>
+                    <span class="text-white mx-2" sec:authentication="principal.authorities">권한</span>
+                    <button class="mainlogoutbtn" type="submit">Logout</button>
+                </form>
             </div>
         </div>
     </nav>
-    <div class="middle">
-        <div class="tbody" th:fragment="tbody">
-            <aside class="sidebar">
-                <div>
-                    <ul class="list-unstyled ps-0">
-                        <li class="category-title">
-                            <a href="#">
-                                ● HOME
-                            </a>
-                        </li>
-                        <li class="category-title">
-                            <div>
-                                ● BOARD
-                            </div>
-                            <div>
-                                <ul class="category-list">
-                                    <li><a href="#" class="link-dark rounded">NOTICE</a></li>
-                                    <li><a href="#" class="link-dark rounded">FREE BOARD</a></li>
-                                    <li><a href="#" class="link-dark rounded">FAQ</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="category-title">
-                            <a href="#">
-                                ● NOTE
-                            </a>
-                        </li>
-                        <li class="border-top my-3"></li>
-                    </ul>
-                </div>
-            </aside>
-        </div>
-    </div>
 </main>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script src="js/bootstrap.min.js"></script>
-<script>
-    $(document).ready(function (){
-        $.ajax({
-            url: '/api/board/category',
-            type: 'GET',
-            dataType: JSON,
-            success: function (result){
-                $.each(result, function (idx, item){
-                    $('.category-list').append("<li id="+ idx +">" +item.categoryName+ "</li>")
-                })
-            },
-            error: function () {
-                alert("Message : error")
-            }
-        })
-    })
-</script>
 </body>
 </html>
