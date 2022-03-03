@@ -66,20 +66,27 @@ public class BoardApiController {
         return boardService.getCategory();
     }
 
-    @GetMapping("/test")
-    public List<BoardDto> getList(@RequestParam(defaultValue = "FREE_BOARD") String ctg,
-                                  @RequestParam(required = false, defaultValue = "1") int pn){
+    @GetMapping({"/test/{ctg}/{pn}", "/test", "/test/{pn}"})
+    public Map<String, Object> getLists2(@PathVariable(required = false) String ctg,
+                                        @PathVariable(required = false) Integer pn) {
+        if (ctg == null){
+            ctg = "NOTICE";
+        }
+        if (pn == null){
+            pn = 1;
+        }
         List<BoardDto> findAll = boardService.getList(ctg);
+        int total = findAll.size();
         Criteria criteria = new Criteria(pn);
         criteria.setTotalElements(findAll.size());
-        criteria.setTotalPages((int) Math.ceil(criteria.getTotalElements()/(double)criteria.getRecords()));
-        criteria.setLastPage(Math.min(criteria.getTotalPages(), (criteria.getStartPage()+criteria.getDisplayPageNum()-1)));
+        criteria.setTotalPages((int) Math.ceil(criteria.getTotalElements() / (double) criteria.getRecords()));
+        criteria.setLastPage(Math.min(criteria.getTotalPages(), (criteria.getStartPage() + criteria.getDisplayPageNum() - 1)));
         Map<String, Object> listMap = new HashMap<>();
         List<BoardDto> pagingList = boardService.getPagingList(ctg, criteria);
-        listMap.put("paging",criteria);
+        listMap.put("paging", criteria);
         listMap.put("pagingList", pagingList);
-        return findAll;
-
+        listMap.put("totalC", total);
+        return listMap;
     }
     @GetMapping("/list")
     public Map<String, Object> getLists(@RequestParam(defaultValue = "FREE_BOARD", required = false) String ctg,
@@ -107,4 +114,5 @@ public class BoardApiController {
     public void hitUp(@RequestParam Long bIdx){
         boardService.hitUp(bIdx);
     }
+
 }

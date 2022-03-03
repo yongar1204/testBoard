@@ -53,6 +53,15 @@ public class BoardController {
         return "/board/detail";
     }
 
+    @GetMapping("/detail/{bIdx}")
+    public String detailBoard(@PathVariable Long bIdx,
+                              Model model,
+                              Authentication authentication){
+        model.addAttribute("getBoardDetails", boardService.getDetailBoard(bIdx));
+        model.addAttribute("authentication", authentication);
+        return "/board/detail2";
+    }
+
     @GetMapping("/edit")
     public String edit(@RequestParam Long idx,
                        Model model,

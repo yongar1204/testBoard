@@ -31,7 +31,9 @@
                         <a type="button" class="create btn btn-primary">확인</a>
                         <a type="button" class="btn btn-primary">취소</a>
                         <button type="button" class="create">ggg</button>
+                        <a type="button" class="fileUp btn btn-primary">base64</a>
                     </div>
+                    <img src="">
                 </div>
             </form>
         </div>
@@ -64,6 +66,95 @@
                 window.location.href = '/';
             }
         });
+    })
+
+    $('.fileUp').click(function (){
+        var object = {}
+        var formDataArr = $('#boardForm').serializeArray()
+        var len = formDataArr.length
+        for (i=0; i<len; i++){
+            object[formDataArr[i].name] = formDataArr[i].value;
+        }
+
+        var files = document.querySelector('#img');
+        var result;
+        var reader = new FileReader(files)
+        reader.onload = function (){
+            result = reader.result
+        }
+        console.log(result)
+
+        var jsonData = JSON.stringify(object)
+        console.log(jsonData)
+        // $.ajax({
+        //     url:'/test/api/map',
+        //     type:"POST",
+        //     data:jsonData,
+        //     contentType:"application/json;charset=UTF-8",
+        //     success : function(result){
+        //         console.log('result', result);
+        //         alert('등록되었습니다.');
+        //     }
+        // });
+        // var objects = {};
+        // var formDataAr = $('#boardForm').serializeArray();
+        // var len = formDataAr.length;
+        // for (i = 0; i < len; i++) {
+        //     objects[formDataAr[i].name] = formDataAr[i].value;
+        // }
+        var files = document.querySelector('#img').files[0];
+        var fileL = document.querySelector('#img').files
+        // // console.log(fileL)
+        // var fileArray = [];
+        // for (i=0; i<fileL.length; i++){
+        //     dataPush(i);
+        // }
+        // function dataPush (i){
+        //     var reader = new FileReader();
+        //     var fileObject = {};
+        //     let fileDataURL;
+        //     reader.onload = function () {
+        //         fileObject.dataURL = reader.result;
+        //         fileObject.name = i;
+        //         fileArray.push(fileObject)
+        //         fileDataURL = reader.result;
+        //         // console.log("yoyo"+fileDataURL)
+        //     }
+        //     reader.readAsDataURL(fileL[i]);
+        //     console.log(fileDataURL)
+        //     console.log(fileObject)
+        // }
+        // console.log(fileArray);
+        // var jsonArray = JSON.stringify(fileArray)
+        // console.log(jsonArray);
+        // objects.fileList = fileArray;
+        // console.log(objects)
+        //
+        // var jsonData2 = JSON.stringify(objects)
+        // console.log(jsonData2)
+
+        //
+        // for (let file of fileL) {
+        //     var fileF = {};
+        //     var fileName = file.name;
+        //     var fileContent;
+        //     getBase64(file).then(
+        //         function (data) {
+        //             console.log(data);
+        //             fileF.readUrl = data;
+        //         }
+        //     );
+        //     console.log(fileF)
+        // }
+        // function getBase64(file) {
+        //     return new Promise((resolve, reject) => {
+        //         const reader = new FileReader();
+        //         reader.readAsDataURL(file);
+        //         reader.onload = () => resolve(reader.result);
+        //         reader.onerror = error => reject(error);
+        //     });
+        // }
+        //
     })
 </script>
 <script>

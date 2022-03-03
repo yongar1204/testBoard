@@ -21,6 +21,11 @@ public class ReplyApiController {
         return replyService.findBoardReply(bIdx);
     }
 
+    @GetMapping("/list/{bIdx}")
+    public List<Map<String, Object>> replyLists(@PathVariable Long bIdx){
+        return replyService.findBoardReply(bIdx);
+    }
+
     @PostMapping("/save")
     public void insert(@RequestBody Map<String,Object> content,
                        Authentication authentication){

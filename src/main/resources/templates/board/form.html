@@ -68,6 +68,9 @@
                     <div class="text-right">
                         <a type="button" class="create btn btn-primary">확인</a>
                         <a type="button" class="btn btn-primary" href="/board/list">취소</a>
+                        <a type="button" class="fileUp btn btn-primary">up</a>
+                    </div>
+                    <div id="imgs">
                     </div>
                 </div>
             </form>
@@ -106,6 +109,61 @@
                 console.log("error : ", e);
             }
         });
+    })
+
+    $('.fileUp').click(function () {
+        var fileL = document.querySelector('#img').files
+        let objects = {};
+        let formDataAr = $('#boardForm').serializeArray();
+        let len = formDataAr.length;
+        for (let i = 0; i < len; i++) {
+            objects[formDataAr[i].name] = formDataAr[i].value;
+        }
+
+        const convertBase64 = (file) => {
+            return new Promise((resolve, reject) => {
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(file);
+
+                fileReader.onload = () => {
+                    resolve(fileReader.result);
+                };
+
+                fileReader.onerror = (error) => {
+                    reject(error);
+                };
+            });
+        };
+
+        let imgArr = [];
+        async function sendData(){
+            for (let file of fileL){
+                let imgJson = {};
+                imgJson.fileName = file.name
+                imgJson.fileSize = file.size
+                await uploadImage(file, imgJson);
+            }
+            objects.fileList = imgArr
+            console.log(imgArr)
+            $.ajax({
+                url: '/test/api/map',
+                type: 'POST',
+                data: JSON.stringify(objects),
+                contentType: "application/json;charset=UTF-8",
+                success: function (){
+                    alert("success")
+                }
+            })
+        }
+        async function uploadImage(e, imgJson){
+            const base64 = await convertBase64(e);
+            await pushJson(base64, imgJson);
+        }
+        async function pushJson(base64, imgJson){
+            imgJson.fileData = base64
+            imgArr.push(imgJson)
+        }
+        sendData();
     })
 </script>
 </body>

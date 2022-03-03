@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/starter-template.css}" href="/static/css/starter-template.css">
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/464a3068ae.js" crossorigin="anonymous"></script>
+    <!--    <script src="js/bootstrap.min.js"></script>-->
+    <title>DETAIL</title>
+</head>
+<body>
+<main>
+    <nav class="navbar navbar-inverse navbar-fixed-top" th:replace="fragment/common :: menu"></nav>
+    <div class="modal-dialog" role="document">
+        <div class="classify1">본문</div>
+        <div class="modal-content rounded-6 shadow">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" th:text="${getBoardDetails.board.bIdx} +':' + ${getBoardDetails.board.title}">Modal title</h5>
+            </div>
+            <div class="modal-body py-0">
+                <div class="bNum" th:id="${getBoardDetails.board.bIdx}">
+                </div>
+                <div class="decContent">
+                    <p th:text="'Content : ' + ${getBoardDetails.board.content} ">
+                        Content
+                    </p>
+                </div>
+                <div class="decContent fileList">
+                    <div>
+                        Controller
+                    </div>
+                    <a th:each="fileMap:${getBoardDetails.files}"
+                       th:text="'FileName : ' +  ${fileMap.orig_file_name}"
+                       th:href="@{'/board/downLoad/' + ${fileMap.idx}}">
+                        fileName
+                    </a>
+                    <div>
+                        ApiController
+                    </div>
+                    <a th:each="fileMap:${getBoardDetails.files}"
+                       th:text="'FileName : ' +  ${fileMap.orig_file_name}"
+                       th:class="fileDown"
+                       th:href="@{'/api/file/downLoad?idx=' + ${fileMap.idx}}"
+                       th:id="${fileMap.idx}">
+                        fileName
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer flex-column border-top-0">
+                <form id="deleteBoard" th:action="@{/board/delete(idx=${param.idx})}" method="post">
+                    <a type="button" class="btn btn-primary" th:href="@{/board/list}">목록</a>
+                    <a type="button" class="btn btn-primary"
+                       th:if="${authentication.getName() == getBoardDetails.board.userId || #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                       th:href="@{/board/edit(idx=${getBoardDetails.board.get('bIdx')})}">수정</a>
+                    <a type="button" class="btn btn-primary"
+                       th:if="${authentication.getName() == getBoardDetails.board.userId || #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                       th:href="@{/board/edit2(idx=${getBoardDetails.board.get('bIdx')})}">수정2</a>
+                    <button type="submit" id="delete-btn" class="btn btn-primary">삭제</button>
+                </form>
+            </div>
+            <button id ="deleteApiBtn">DELETE</button>
+        </div>
+        <div id="replyContainer">
+            <div class="classify1">댓글</div>
+            <div>
+                <tr>
+                    <div class="modal-content rounded-6 shadow" id="replyList">
+                        <div class="line"></div>
+                    </div>
+                </tr>
+            </div>
+            <div class="classify1">댓글입력</div>
+            <div class="modal-content rounded-6 shadow">
+                <form id="replyForm" method="post">
+                    <div class="mb-3 inputBox">
+                        <label for="replyInput" class="form-label">Content</label>
+                        <input type="text" class="form-control" id="replyInput" name="content">
+                    </div>
+                    <div class="text-right">
+                        <button type="button" class="btn btn-primary" id="replySummit">확인</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    $(document).ready(function (){
+        replyListUp()
+        var search = location.search
+        var params = new URLSearchParams(search);
+        var bIdx = params.get('idx');
+        var bNum = document.getElementsByClassName('bNum').item(0).id
+        $.ajax({
+            url: '/api/board/hitUp',
+            type: 'POST',
+            data: {
+                bIdx : bNum
+            }
+        })
+
+        $('#replySummit').click(function (){
+            var search = location.search;
+            var params = new URLSearchParams(search);
+            var bIdx= params.get('bIdx');
+            var reply = $('#replyInput').val();
+            var formData = {
+                "bIdx":bIdx,
+                "reply":reply
+            }
+            var jsonData = JSON.stringify(formData)
+            $.ajax({
+                url: '/api/reply/save',
+                type: 'POST',
+                data: jsonData,
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'text',
+                success: function (){
+                    replyListUp();
+                    $('#replyInput').val("")
+                }
+            })
+        })
+    })
+    $('#deleteApiBtn').click(function (){
+        var search = location.search
+        var params = new URLSearchParams(search);
+        var getIdx= params.get('idx');
+        if (confirm('정말 삭제하시겠습니까?')){
+            $.ajax({
+                url:'/api/board/delete',
+                type: 'DELETE',
+                data: {
+                    idx: getIdx
+                },
+                success: function(){
+                    alert('삭제되었습니다.');
+                    window.location.href = '/board/list'
+                }
+            })
+        } else false;
+    })
+
+
+    function replyListUp(){
+        var search = location.search
+        var params = new URLSearchParams(search);
+        var getIdx= params.get('idx');
+        var bNum = document.getElementsByClassName('bNum').item(0).id
+        $.ajax({
+            url: '/api/reply/list',
+            data: {
+                bIdx: bNum
+            },
+            type: 'GET',
+            dataType: 'JSON',
+            success: function (result){
+                console.log(result)
+                $('#replyList').empty();
+                $.each(result, function (idx, item){
+                    console.log(item)
+                    $('#replyList').append(
+                        "<div class='replybox'><div>\n" +
+                        "<div>\n" +
+                        "<label>Name : </label>\n" +
+                        "<td>" + item.userId + "</td></div>\n" +
+                        "<div>\n" +
+                        "<label>Content : </label>\n" +
+                        "<td>" + item.content + "</td></div>\n" +
+                        "<div class=\"line\"></div></div>\n" +
+                        "<a class=\"fas fa-times deleteReply\" id='"+item.idx+"'></a></div>"
+                    )
+                    $('#replyList').off('click','.deleteReply').on('click', '.deleteReply' ,function (){
+                        var idx = this.id
+                        $.ajax({
+                            url:'/api/reply/delete',
+                            type:'POST',
+                            data:{
+                                idx:idx
+                            },
+                            success:function (){
+                                replyListUp()
+                            }
+                        })
+                    })
+                })
+            }
+        })
+    }
+</script>
+</body>
+</html>

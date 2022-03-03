@@ -68,7 +68,7 @@ $(document).ready(function (){
                 })
             })
             $.ajax({
-                url: '/api/board/list',
+                url: '/api/board/test',
                 type: 'GET',
                 dataType: 'JSON',
                 cache : false,
@@ -83,13 +83,13 @@ $(document).ready(function (){
                     $(document).on('click', '.pn' , function (){
                         var pn = this.id
                         $.ajax({
-                            url: '/api/board/list',
+                            url: '/api/board/test/'+pn,
                             type: 'GET',
                             dataType: 'JSON',
                             cache: false,
-                            data:{
-                                pn: pn
-                            },
+                            // data:{
+                            //     pn: pn
+                            // },
                             success: function (data){
                                 console.log(data)
                                 func(data)

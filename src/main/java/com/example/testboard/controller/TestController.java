@@ -21,6 +21,6 @@ public class TestController {
     }
     @GetMapping("/sc")
     public String sc(){
-        return "/schedules/scheduleForm";
+        return "/board/boardForm";
     }
 }

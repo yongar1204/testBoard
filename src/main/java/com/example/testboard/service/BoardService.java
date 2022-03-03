@@ -4,7 +4,6 @@ import com.example.testboard.mapper.BoardMapper;
 import com.example.testboard.model.Criteria;
 import com.example.testboard.model.dto.BoardDto;
 import com.example.testboard.model.dto.CategoryDto;
-import com.example.testboard.model.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -96,5 +95,12 @@ public class BoardService {
 
     public void deleteCategory(String catName) {
         boardMapper.deleteCategory(catName);
+    }
+// PathVariable
+    public Map<String, Object> getDetailBoard(Long bIdx) {
+        Map<String,Object> boardMap = new HashMap<>();
+        boardMap.put("board", boardMapper.getDetail(bIdx));
+        boardMap.put("files", fileService.getDetail(bIdx));
+        return boardMap;
     }
 }
